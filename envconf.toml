@@ -1,0 +1,9 @@
+[[files]]
+template = "./test/example1/.env.sample"
+output = "./test/example1/.env"
+allow-empty = ["IGNORED_ENV"]
+force-prompt-on-create = ["FORCED_PROMPT_WITH_DEFAULT_VALUE"]
+
+[[files]]
+template = "./test/example2/.env.local.sample"
+output = "./test/example2/.env.local"
