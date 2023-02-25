@@ -1,7 +1,7 @@
-import * as path from "path/mod.ts";
-import * as dotenv from "dotenv/mod.ts";
-import * as toml from "encoding/toml.ts";
-import { z } from "zod/mod.ts";
+import * as path from "https://deno.land/std@0.177.0/path/mod.ts";
+import * as dotenv from "https://deno.land/std@0.177.0/dotenv/mod.ts";
+import * as toml from "https://deno.land/std@0.177.0/encoding/toml.ts";
+import { z } from "https://deno.land/x/zod@v3.20.5/mod.ts";
 import { Config, ConfigFile } from "./types.ts";
 
 export async function readTemplateFile(

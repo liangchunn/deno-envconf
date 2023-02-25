@@ -1,6 +1,6 @@
-import Ask from "ask/mod.ts";
-import { PromptOpts } from "ask/src/core/prompt.ts";
-import { Result } from "ask/src/core/result.ts";
+import Ask from "https://deno.land/x/ask@1.0.6/mod.ts";
+import { PromptOpts } from "https://deno.land/x/ask@1.0.6/src/core/prompt.ts";
+import { Result } from "https://deno.land/x/ask@1.0.6/src/core/result.ts";
 import { Config } from "./types.ts";
 import {
   difference,

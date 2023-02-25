@@ -1,12 +1,4 @@
 {
-  "imports": {
-    "path/": "https://deno.land/std@0.177.0/path/",
-    "dotenv/": "https://deno.land/std@0.177.0/dotenv/",
-    "encoding/": "https://deno.land/std@0.177.0/encoding/",
-    "zod/": "https://deno.land/x/zod@v3.20.5/",
-    "yargs/": "https://deno.land/x/yargs@v17.7.1-deno/",
-    "ask/": "https://deno.land/x/ask@1.0.6/"
-  },
   "tasks": {
     "dev": "deno run --allow-read --allow-write --allow-env src/mod.ts"
   }
