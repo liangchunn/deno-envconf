@@ -1,12 +1,12 @@
 import { getOutputFilePath, readTemplateFile } from "./utils.ts";
 import { Config } from "./types.ts";
-import { PromptOpts } from "https://deno.land/x/ask@1.0.6/src/core/prompt.ts";
-import Ask from "https://deno.land/x/ask@1.0.6/mod.ts";
-import { Result } from "https://deno.land/x/ask@1.0.6/src/core/result.ts";
+import Ask from "ask/mod.ts";
+import { PromptOpts } from "ask/src/core/prompt.ts";
+import { Result } from "ask/src/core/result.ts";
 
 export async function create(resolvedConfigPath: string, config: Config) {
-  const ignoreKeys = config["allow-empty"] ?? [];
-  const forcedKeys = config["force-prompt-on-create"] ?? [];
+  const allowedEmptyKeys = config["allow-empty"] ?? [];
+  const forcedPromptKeys = config["force-prompt-on-create"] ?? [];
   const { templateEnvs, templateFileContents, templateRelativePath } =
     await readTemplateFile(resolvedConfigPath, config);
   // get all env vars which are unpopulated in the env file OR matches the overrides
@@ -14,8 +14,8 @@ export async function create(resolvedConfigPath: string, config: Config) {
   const envVarKeys = Object.entries(templateEnvs)
     .filter(
       ([key, value]) =>
-        (value === "" || forcedKeys.includes(key)) &&
-        !ignoreKeys.includes(key),
+        (value === "" || forcedPromptKeys.includes(key)) &&
+        !allowedEmptyKeys.includes(key),
     )
     .map(([key]) => key);
   console.log(
@@ -26,8 +26,9 @@ export async function create(resolvedConfigPath: string, config: Config) {
     message: `Enter the value for ${envVar}:`,
     name: envVar,
     type: "input",
-    // show forcedKeys's default value if available
-    // default: forcedKeys.includes(envVar) ? envVars[envVar] : undefined,
+    default: forcedPromptKeys.includes(envVar)
+      ? templateEnvs[envVar]
+      : undefined,
   }));
   const ask = new Ask();
   const answers = await ask.prompt(questions);

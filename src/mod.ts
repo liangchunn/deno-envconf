@@ -1,5 +1,4 @@
-import yargs from "https://deno.land/x/yargs@v17.7.1-deno/deno.ts";
-// import { Input } from "https://deno.land/x/cliffy@v0.25.7/prompt/mod.ts";
+import yargs from "yargs/deno.ts";
 import { create } from "./create.ts";
 import { update } from "./update.ts";
 import { getConfig, outputFileExists } from "./utils.ts";

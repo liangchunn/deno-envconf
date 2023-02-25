@@ -1,7 +1,7 @@
-import * as path from "https://deno.land/std@0.177.0/path/mod.ts";
-import * as dotenv from "https://deno.land/std@0.177.0/dotenv/mod.ts";
-import * as toml from "https://deno.land/std@0.177.0/encoding/toml.ts";
-import { z } from "https://deno.land/x/zod@v3.20.5/mod.ts";
+import * as path from "path/mod.ts";
+import * as dotenv from "dotenv/mod.ts";
+import * as toml from "encoding/toml.ts";
+import { z } from "zod/mod.ts";
 import { Config, ConfigFile } from "./types.ts";
 
 export async function readTemplateFile(
@@ -109,7 +109,10 @@ export async function getConfig(configPathRelative: string) {
       parsedConfigs: parsedConfigFile.files,
     };
   } else {
-    console.error(`%c'${configPathRelative}' does not exist`, "color: red");
+    console.error(
+      `%c'${configPathRelative}' does not exist. Use \`init\` to create a new configuration file.`,
+      "color: red",
+    );
     Deno.exit(1);
   }
 }
@@ -163,6 +166,10 @@ function validateConfigFile(configFile: ConfigFile) {
     console.error(e);
     Deno.exit(1);
   }
+}
+
+export function difference<T>(a: T[], b: T[]): T[] {
+  return a.filter((a_i) => !b.includes(a_i));
 }
 
 export const TEMPLATE_FILE = `

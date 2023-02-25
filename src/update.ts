@@ -1,15 +1,16 @@
-import Ask from "https://deno.land/x/ask@1.0.6/mod.ts";
-import { PromptOpts } from "https://deno.land/x/ask@1.0.6/src/core/prompt.ts";
-import { Result } from "https://deno.land/x/ask@1.0.6/src/core/result.ts";
+import Ask from "ask/mod.ts";
+import { PromptOpts } from "ask/src/core/prompt.ts";
+import { Result } from "ask/src/core/result.ts";
 import { Config } from "./types.ts";
 import {
+  difference,
   getOutputFilePath,
   readOutputFile,
   readTemplateFile,
 } from "./utils.ts";
 
 export async function update(resolvedConfigPath: string, config: Config) {
-  const ignoreKeys = config["allow-empty"] ?? [];
+  const allowedEmptyKeys = config["allow-empty"] ?? [];
   const { templateEnvs } = await readTemplateFile(resolvedConfigPath, config);
   const { outputEnvs, outputFileContents, outputRelativePath } =
     await readOutputFile(
@@ -17,8 +18,9 @@ export async function update(resolvedConfigPath: string, config: Config) {
       config,
     );
   // if there's a template env which doesn't exist in the output env
-  const keysNotInOutput = Object.keys(templateEnvs).filter(
-    (x) => !Object.keys(outputEnvs).includes(x),
+  const keysNotInOutput = difference(
+    Object.keys(templateEnvs),
+    Object.keys(outputEnvs),
   );
   /**
    * handled cases:
@@ -32,7 +34,7 @@ export async function update(resolvedConfigPath: string, config: Config) {
       "color: yellow",
     );
     const questions: PromptOpts[] = keysNotInOutput.map((envVar) => {
-      const isAllowEmpty = ignoreKeys.includes(envVar);
+      const isAllowEmpty = allowedEmptyKeys.includes(envVar);
       const defaultValue = templateEnvs[envVar];
       if (isAllowEmpty) {
         return {
@@ -45,7 +47,7 @@ export async function update(resolvedConfigPath: string, config: Config) {
           message: `Enter the value for ${envVar}:`,
           name: envVar,
           type: "input",
-          // default: defaultValue.length ? defaultValue : undefined,
+          default: defaultValue.length ? defaultValue : undefined,
         };
       }
     });
